@@ -2,7 +2,7 @@
 from collections.abc import Iterable
 from datetime import date, datetime, timedelta
 from pathlib import Path
-from typing import IO, TYPE_CHECKING, Any, BinaryIO, Optional, TypeAlias
+from typing import IO, TYPE_CHECKING, Any, BinaryIO, Literal, Optional, TypeAlias, get_args
 
 from dateutil.relativedelta import relativedelta
 from platformdirs import user_data_dir
@@ -177,43 +177,87 @@ RANK_EQUIVALENTS = {
 
 
 # Options for multiple choice parameters (non-endpoint-specific)
-CC_LICENSES = ['CC-BY', 'CC-BY-NC', 'CC-BY-ND', 'CC-BY-SA', 'CC-BY-NC-ND', 'CC-BY-NC-SA', 'CC0']
-ALL_LICENSES = CC_LICENSES + ['ALL RIGHTS RESERVED']
-COMMUNITY_ID_STATUSES = ['most_agree', 'most_disagree', 'some_agree']
-CONSERVATION_STATUSES = ['LC', 'NT', 'VU', 'EN', 'CR', 'EW', 'EX']
-ESTABLISTMENT_MEANS = ['introduced', 'native', 'endemic']
-EXTRA_PROPERTIES = ['fields', 'identifications', 'projects']
-GEOPRIVACY_LEVELS = ['obscured', 'obscured_private', 'open', 'private']
-HAS_PROPERTIES = ['photo', 'geo']
-HISTOGRAM_DATE_FIELDS = ['created', 'observed']
-HISTOGRAM_INTERVALS = ['year', 'month', 'week', 'day', 'hour', 'month_of_year', 'week_of_year']
+# Literal type aliases are the single source of truth; lists are derived via get_args()
+CCLicense = Literal[
+    'CC-BY', 'CC-BY-NC', 'CC-BY-ND', 'CC-BY-SA', 'CC-BY-NC-ND', 'CC-BY-NC-SA', 'CC0'
+]
+CC_LICENSES: list[str] = list(get_args(CCLicense))
+ALL_LICENSES: list[str] = CC_LICENSES + ['ALL RIGHTS RESERVED']
+
+CommunityIDStatus = Literal['most_agree', 'most_disagree', 'some_agree']
+COMMUNITY_ID_STATUSES: list[str] = list(get_args(CommunityIDStatus))
+
+ConservationStatusCode = Literal['LC', 'NT', 'VU', 'EN', 'CR', 'EW', 'EX']
+CONSERVATION_STATUSES: list[str] = list(get_args(ConservationStatusCode))
+
+EstablishmentMeansStr = Literal['introduced', 'native', 'endemic']
+ESTABLISTMENT_MEANS: list[str] = list(get_args(EstablishmentMeansStr))
+
+ExtraProperty = Literal['fields', 'identifications', 'projects']
+EXTRA_PROPERTIES: list[str] = list(get_args(ExtraProperty))
+
+GeoprivacyLevel = Literal['obscured', 'obscured_private', 'open', 'private']
+GEOPRIVACY_LEVELS: list[str] = list(get_args(GeoprivacyLevel))
+
+HasProperty = Literal['photo', 'geo']
+HAS_PROPERTIES: list[str] = list(get_args(HasProperty))
+
+HistogramDateField = Literal['created', 'observed']
+HISTOGRAM_DATE_FIELDS: list[str] = list(get_args(HistogramDateField))
+
+HistogramInterval = Literal['year', 'month', 'week', 'day', 'hour', 'month_of_year', 'week_of_year']
+HISTOGRAM_INTERVALS: list[str] = list(get_args(HistogramInterval))
+
 ICON_SIZES = {'icon': 32, 'square': 75, 'small': 75, 'medium': 200, 'large': 200, 'original': 200}
-ID_CATEGORIES = ['improving', 'supporting', 'leading', 'maverick']
-INBOXES = ['inbox', 'sent', 'any']
-ORDER_DIRECTIONS = ['asc', 'desc']
-PHOTO_SIZES = ['square', 'small', 'medium', 'large', 'original']
-PLACE_CATEGORIES = ['standard', 'community']
-PROJECT_TYPES = ['assessment', 'bioblitz', 'collection', 'umbrella']
-QUALITY_GRADES = ['casual', 'needs_id', 'research']
-SEARCH_PROPERTIES = ['names', 'tags', 'description', 'place']
-SOURCES = ['places', 'projects', 'taxa', 'users']
+
+IDCategory = Literal['improving', 'supporting', 'leading', 'maverick']
+ID_CATEGORIES: list[str] = list(get_args(IDCategory))
+
+Inbox = Literal['inbox', 'sent', 'any']
+INBOXES: list[str] = list(get_args(Inbox))
+
+OrderDirection = Literal['asc', 'desc']
+ORDER_DIRECTIONS: list[str] = list(get_args(OrderDirection))
+
+PhotoSize = Literal['square', 'small', 'medium', 'large', 'original']
+PHOTO_SIZES: list[str] = list(get_args(PhotoSize))
+
+PlaceCategory = Literal['standard', 'community']
+PLACE_CATEGORIES: list[str] = list(get_args(PlaceCategory))
+
+ProjectType = Literal['assessment', 'bioblitz', 'collection', 'umbrella']
+PROJECT_TYPES: list[str] = list(get_args(ProjectType))
+
+QualityGrade = Literal['casual', 'needs_id', 'research']
+QUALITY_GRADES: list[str] = list(get_args(QualityGrade))
+
+SearchProperty = Literal['names', 'tags', 'description', 'place']
+SEARCH_PROPERTIES: list[str] = list(get_args(SearchProperty))
+
+Source = Literal['places', 'projects', 'taxa', 'users']
+SOURCES: list[str] = list(get_args(Source))
 
 # Endpoint-specific options for multiple choice parameters
-V0_OBS_ORDER_BY_PROPERTIES = ['date_added', 'observed_on']
-V1_OBS_ORDER_BY_PROPERTIES = ['created_at', 'id', 'observed_on', 'species_guess', 'votes']
-V2_OBS_ORDER_BY_PROPERTIES = [
-    'created_at',
-    'id',
-    'observed_on',
-    'species_guess',
-    'updated_at',
-    'votes',
-    'random',
+V0ObsOrderBy = Literal['date_added', 'observed_on']
+V0_OBS_ORDER_BY_PROPERTIES: list[str] = list(get_args(V0ObsOrderBy))
+
+V1ObsOrderBy = Literal[
+    'created_at', 'geo_score', 'id', 'observed_on', 'random', 'species_guess', 'updated_at', 'votes'
 ]
-PROJECT_ORDER_BY_PROPERTIES = ['created', 'distance', 'featured', 'recent_posts', 'updated']
+V1_OBS_ORDER_BY_PROPERTIES: list[str] = list(get_args(V1ObsOrderBy))
+
+V2ObsOrderBy = Literal[
+    'created_at', 'id', 'observed_on', 'species_guess', 'updated_at', 'votes', 'random'
+]
+V2_OBS_ORDER_BY_PROPERTIES: list[str] = list(get_args(V2ObsOrderBy))
+
+ProjectOrderBy = Literal['created', 'distance', 'featured', 'recent_posts', 'updated']
+PROJECT_ORDER_BY_PROPERTIES: list[str] = list(get_args(ProjectOrderBy))
+
+TaxaOrderBy = Literal['id', 'created_at', 'observations_count']
+TAXA_ORDER_BY_PROPERTIES: list[str] = list(get_args(TaxaOrderBy))
 
 # Multiple-choice request parameters, with keys mapped to their possible choices (non-endpoint-specific)
-# TODO: python 3.11 supports Literal[*list] syntax, which would be useful here
 MULTIPLE_CHOICE_PARAMS = {
     'box': INBOXES,
     'category': ID_CATEGORIES,
